@@ -9,6 +9,7 @@ import java.io.File;
 import java.io.IOException;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
+import java.util.HashMap;
 
 import javax.imageio.ImageIO;
 import javax.swing.JButton;
@@ -22,6 +23,7 @@ import javax.swing.JPanel;
  */
 public class SupportFunctions {
 
+	static HashMap<String, BufferedImage> stringBufferedImageHashMap = new HashMap<>();
 	/**
 	 * Returns a buffered Image given a string filename.
 	 * 
@@ -31,14 +33,25 @@ public class SupportFunctions {
 	 * 			The buffered image to be returned
 	 */
 	public static BufferedImage getImageWithText(String text) {
-		BufferedImage image = null;
-		try {
-			image = ImageIO.read(new File("Images/" + text));
-		} catch (IOException exception) {
-			throw new RuntimeException("no image found");
+		if (stringBufferedImageHashMap.containsKey(text)) {
+			return stringBufferedImageHashMap.get(text);
+		} else {
+			BufferedImage image = null;
+			try {
+				image = ImageIO.read(new File("Images/" + text));
+			} catch (IOException exception) {
+				throw new RuntimeException("no image found");
+			}
+			stringBufferedImageHashMap.put(text, image);
+			return image;
 		}
-		return image;
-
+		/* BufferedImage image = null;
+			try {
+				image = ImageIO.read(new File("Images/" + text));
+			} catch (IOException exception) {
+				throw new RuntimeException("no image found");
+			}
+			return image; */
 	}
 
 	/**
